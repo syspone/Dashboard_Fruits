@@ -26,7 +26,7 @@ O projeto foi desenvolvido com finalidade educacional e de portfólio. O código
 
 ## Dados
 
-O projeto usa um dataset fictício, criado dentro do próprio código, com três colunas:
+O projeto usa um dataset fictício, guardado em `data/raw/fruits.csv`, com três colunas:
 
 - **Fruits**: nome da fruta (Maçã, Laranja, Melão e Uva);
 - **Amount**: quantidade;
@@ -61,7 +61,7 @@ O **Melão** é a fruta com maior quantidade, com **7 unidades** (2 em Gramado e
 
 ### Quantidade de Frutas por Cidade
 
-![Quantidade de Frutas por Cidade](fruits.png)
+![Quantidade de Frutas por Cidade](reports/figures/fruits.png)
 
 *Gráfico de barras agrupadas gerado com Plotly: cada cor representa uma cidade.*
 
@@ -69,26 +69,45 @@ O **Melão** é a fruta com maior quantidade, com **7 unidades** (2 em Gramado e
 
 O projeto foi desenvolvido em quatro etapas:
 
-1. **Criação dos dados**: montagem do DataFrame com Pandas;
-2. **Visualização**: criação do gráfico de barras agrupadas com Plotly Express;
-3. **Exportação**: gravação do gráfico em `fruits.png` com Kaleido;
-4. **Dashboard**: montagem da página com Dash e publicação em um servidor local.
+1. **Dados**: leitura e validação do CSV bruto com Pandas (`src/datafruit/data.py`);
+2. **Exploração**: qualidade dos dados e respostas às perguntas da análise (`notebooks/01_exploracao_dados.ipynb`);
+3. **Visualização**: gráfico de barras agrupadas com Plotly e exportação em PNG com Kaleido (`notebooks/02_visualizacao.ipynb`);
+4. **Dashboard**: página web com Dash publicada em um servidor local (`src/datafruit/dashboard.py`).
 
 ## Como Executar
 
-1. Instale as dependências (Python 3.14):
+1. Crie o ambiente virtual e instale as dependências (Python 3.14):
 
    ```bash
-   pip install pandas plotly dash kaleido
+   python -m venv .venv
+   source .venv/bin/activate
+   pip install -r requirements.txt
    ```
 
-2. Execute o script:
+2. Copie as configurações de exemplo:
 
    ```bash
-   python DataFruits.py
+   cp .env.example .env
    ```
 
-3. Abra [http://127.0.0.1:8050](http://127.0.0.1:8050) no navegador.
+3. Rode o pipeline completo (gera `data/processed/` e o gráfico em `reports/figures/`):
+
+   ```bash
+   python -m datafruit.pipeline
+   ```
+
+4. Suba o dashboard e abra [http://127.0.0.1:8050](http://127.0.0.1:8050):
+
+   ```bash
+   python -m datafruit.dashboard
+   ```
+
+5. (Opcional) Explore os notebooks e rode os testes:
+
+   ```bash
+   jupyter lab notebooks/
+   pytest
+   ```
 
 Para desligar o servidor, use `Ctrl+C` no terminal (ou o botão Stop do PyCharm).
 
@@ -99,6 +118,8 @@ Para desligar o servidor, use `Ctrl+C` no terminal (ou o botão Stop do PyCharm)
 - **Plotly**
 - **Dash**
 - **Kaleido**
+- **Jupyter**
+- **pytest**
 - **PyCharm**
 
 ## Estrutura do Projeto
@@ -106,8 +127,31 @@ Para desligar o servidor, use `Ctrl+C` no terminal (ou o botão Stop do PyCharm)
 ```text
 DataFruit/
 │
-├── DataFruits.py   # cria os dados, o gráfico e o dashboard
-├── fruits.png      # imagem do gráfico exportada pelo script
+├── data/
+│   ├── raw/                   # dados originais (nunca editados à mão)
+│   │   └── fruits.csv
+│   └── processed/             # dados tratados, gerados pelo pipeline
+│
+├── notebooks/                 # análise passo a passo
+│   ├── 01_exploracao_dados.ipynb
+│   └── 02_visualizacao.ipynb
+│
+├── reports/
+│   └── figures/
+│       └── fruits.png         # gráfico exportado
+│
+├── src/
+│   └── datafruit/             # código reutilizável (pacote Python)
+│       ├── config.py          # caminhos e variáveis do .env
+│       ├── data.py            # leitura, validação e resumos
+│       ├── visualization.py   # gráficos com Plotly
+│       ├── pipeline.py        # roda tudo de ponta a ponta
+│       └── dashboard.py       # app web com Dash
+│
+├── tests/                     # testes automatizados (pytest)
+├── .env.example               # modelo das configurações
+├── pyproject.toml             # metadados do pacote
+├── requirements.txt           # dependências
 └── README.md
 ```
 
@@ -119,6 +163,8 @@ Este projeto foi desenvolvido para praticar e consolidar conhecimentos em:
 - Visualização de dados com Plotly;
 - Desenvolvimento de dashboards web com Dash;
 - Exportação de gráficos como imagem;
+- Organização de projetos de dados (notebooks + pacote Python);
+- Testes automatizados com pytest;
 - Organização e documentação de projetos.
 
 ## Autor

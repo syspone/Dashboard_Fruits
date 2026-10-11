@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "datafruit"
+version = "3.0.0"
+description = "Dashboard de frutas por cidade com Pandas, Plotly e Dash"
+authors = [{ name = "Cristian Matias de Souza" }]
+requires-python = ">=3.12"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
